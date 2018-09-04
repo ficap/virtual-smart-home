@@ -1,0 +1,48 @@
+house:
+  devices:
+    - name: air-conditioner
+      type: Ac
+
+    - name: television
+      type: Tv
+
+    - name: front-door
+      type: Door
+
+    - name: rear-door
+      type: Door
+
+    - name: fireplace
+      type: Fireplace
+
+    - name: colorful-light-0
+      type: RGBLight
+
+    - name: colorful-light-1
+      type: RGBLight
+
+    - name: colorful-light-2
+      type: RGBLight
+
+    - name: colorful-light-3
+      type: RGBLight
+
+    - name: colorful-light-4
+      type: RGBLight
+
+    - name: colorful-light-5
+      type: RGBLight
+
+    - name: colorful-light-6
+      type: RGBLight
+
+    - name: colorful-light-7
+      type: RGBLight
+
+    - name: temp
+      type: Thermometer
+      unit: °C
+
+    - name: humidity
+      type: Hygrometer
+      unit: "%"
