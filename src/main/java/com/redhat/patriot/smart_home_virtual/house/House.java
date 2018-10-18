@@ -16,10 +16,11 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.redhat.patriot.smart_home_virtual.house.parsing.HouseComposer;
+import com.redhat.patriot.smart_home_virtual.house.parsing.ParserException;
+import com.redhat.patriot.smart_home_virtual.house.parsing.YamlHouseParser;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,26 +32,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
 public final class House {
-    /*
-    has:
-        lights
-        tv
-        windows
-        temperature
-        ac
-     */
+
+    private String name;
     private Map<String, Device> devices;
 
     private static Map<String, House> houses = new ConcurrentHashMap<>();
 
-    private House(Map<String, Device> devices) {
+    private House(String name, Map<String, Device> devices) {
+        this.name = name;
         this.devices = devices;
-
     }
 
-    public static House getHouseInstanceFromURL(URL path) throws IOException {
+    public static House getHouseInstanceFromURL(URL path) throws IOException, ParserException {
         if(!houses.containsKey(path.toString())) {
-            houses.put(path.toString(), new House.Parser(path).parseHouseFromConfig());
+            houses.put(path.toString(), new HouseComposer(new YamlHouseParser(path)).getHouse());
         }
 
         return houses.get(path.toString());
@@ -60,6 +55,7 @@ public final class House {
         return devices.get(id);
     }
 
+    @Nullable
     public <T> T getDeviceWithId(String id, Class<T> type) {
         Device dev = getDeviceWithId(id);
         if (type.isInstance(dev)) {
@@ -80,64 +76,13 @@ public final class House {
         return toReturn;
     }
 
-    public static final class Parser {
-        private URL input;
-
-        private Parser(URL url) {
-            this.input = url;
-        }
-
-        public House parseHouseFromConfig() throws IOException, IllegalArgumentException {
-            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-            JsonNode root = mapper.readTree(this.input);
-            JsonNode houseNode = root.get("house");
-            if(houseNode == null) {
-                throw new ParserException("bad file format");
-            }
-
-            JsonNode devices = houseNode.get("devices");
-            if(devices == null || !devices.isArray()) {
-                throw new ParserException("bad file format");
-            }
-
-            House.Builder houseBuilder = new House.Builder();
-            for(JsonNode device : devices) {
-                if(!device.has("name") || !device.has("type")) {
-                    throw new ParserException("bad file format");
-                }
-
-                JsonNode nameNode = device.get("name");
-                JsonNode typeNode = device.get("type");
-
-                if(!nameNode.isValueNode() || !typeNode.isValueNode()) {
-                    throw new ParserException("bad file format");
-                }
-
-                String name = device.get("name").asText();
-                String type = device.get("type").asText();
-                int pcs = 1;
-                JsonNode pcsNode = device.get("pcs");
-                if(pcsNode != null && pcsNode.isInt() && pcsNode.asInt() > -1) {
-                    pcs = pcsNode.asInt();
-                }
-
-                for(int i = 0; i < pcs; i++) {
-                    houseBuilder.withDevice(name, type);
-                }
-            }
-
-            return houseBuilder.createHouse();
-        }
-
-        public final class ParserException extends IOException {
-            private ParserException(String message) {
-                super(message);
-            }
-        }
+    public String getName() {
+        return name;
     }
 
     public static class Builder {
 
+        private String houseName = "";
         private Map<String, Device> devices = new ConcurrentHashMap<>();
 
         public Builder withDevices(List<Device> devices) {
@@ -157,8 +102,13 @@ public final class House {
             return this;
         }
 
+        public Builder withHouseName(String houseName) {
+            this.houseName = houseName;
+            return this;
+        }
+
         public House createHouse() {
-            return new House(devices);
+            return new House(houseName, devices);
         }
     }
 

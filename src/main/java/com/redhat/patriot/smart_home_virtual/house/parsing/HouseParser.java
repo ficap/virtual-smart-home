@@ -14,33 +14,13 @@
  *    limitations under the License.
  */
 
-package com.redhat.patriot.smart_home_virtual.house;
+package com.redhat.patriot.smart_home_virtual.house.parsing;
+
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
-public class Hygrometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
-    public static final String DEFAULT_UNIT = "%";
-
-    private float value;
-    private UNIT unit;
-
-    public Hygrometer(String label) {
-        super(label);
-    }
-
-    public Hygrometer(String label, UNIT unit) {
-        super(label);
-        this.unit = unit;
-    }
-
-    @Override
-    public Float getValue() {
-        return this.value;
-    }
-
-    @Override
-    public UNIT getUnit() {
-        return this.unit;
-    }
+public interface HouseParser {
+    HouseEntry getHouseEntry() throws IOException, ParserException;
 }

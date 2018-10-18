@@ -16,6 +16,7 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
+import com.redhat.patriot.smart_home_virtual.house.parsing.ParserException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ class BasicTest {
     }
 
     @Test
-    void testHouseFromFile() throws IOException {
+    void testHouseFromFile() throws IOException, ParserException {
         House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
                 .getResource("house.yaml"));
 
@@ -40,13 +41,13 @@ class BasicTest {
         // ...
         Assertions.assertNotNull(ac);
         Assertions.assertNotNull(tv);
-        Assertions.assertEquals(8, leds.size());
+        Assertions.assertEquals(19, leds.size());
         assertIsInstanceOf(ac, Ac.class);
         assertIsInstanceOf(tv, Tv.class);
     }
 
     @Test
-    void testRGBLight() throws IOException {
+    void testRGBLight() throws IOException, ParserException {
         House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
                 .getResource("house.yaml"));
 
@@ -65,7 +66,7 @@ class BasicTest {
     }
 
     @Test
-    void testHouseBean() throws IOException {
+    void testHouseBean() throws IOException, ParserException {
         HouseBean bean = HouseBean.getInstance();
         House house = bean.getHouse();
 
@@ -80,5 +81,21 @@ class BasicTest {
         Assertions.assertEquals(30, led.getGreen());
         Assertions.assertEquals(50, led.getBlue());
 
+    }
+
+    @Test
+    void testDeviceUnitPresent() throws IOException, ParserException {
+        House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
+                .getResource("house.yaml"));
+        Thermometer<String> t = h.getDeviceWithId("temp", Thermometer.class);
+        Assertions.assertEquals("°F", t.getUnit());
+    }
+
+    @Test
+    void testDeviceUnitDefault() throws IOException, ParserException {
+        House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
+                .getResource("house.yaml"));
+        Thermometer<String> t = h.getDeviceWithId("default-temp", Thermometer.class);
+        Assertions.assertEquals("°C", t.getUnit());
     }
 }

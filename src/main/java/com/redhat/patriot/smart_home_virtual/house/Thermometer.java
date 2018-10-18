@@ -20,6 +20,8 @@ package com.redhat.patriot.smart_home_virtual.house;
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
 public class Thermometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
+    public static final String DEFAULT_UNIT = "°C";
+
     private float temp;
     private UNIT unit;
 
@@ -39,6 +41,6 @@ public class Thermometer<UNIT> extends Sensor implements SimpleValueSensor<Float
 
     @Override
     public UNIT getUnit() {
-        return null;
+        return this.unit;
     }
 }

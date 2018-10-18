@@ -1,4 +1,5 @@
 house:
+  name: my-house
   devices:
     - name: air-conditioner
       type: Ac
@@ -39,9 +40,15 @@ house:
     - name: colorful-light-7
       type: RGBLight
 
+    - name: colorful-light-8
+      type: RGBLight
+
+    - name: garden-light
+      type: RGBLight
+      pcs: 10
+
     - name: temp
       type: Thermometer
-      unit: °C
 
     - name: humidity
       type: Hygrometer

@@ -14,33 +14,18 @@
  *    limitations under the License.
  */
 
-package com.redhat.patriot.smart_home_virtual.house;
+package com.redhat.patriot.smart_home_virtual.house.parsing;
+
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import java.net.URL;
 
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
-public class Hygrometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
-    public static final String DEFAULT_UNIT = "%";
+public final class YamlHouseParser extends JacksonHouseParser {
 
-    private float value;
-    private UNIT unit;
-
-    public Hygrometer(String label) {
-        super(label);
-    }
-
-    public Hygrometer(String label, UNIT unit) {
-        super(label);
-        this.unit = unit;
-    }
-
-    @Override
-    public Float getValue() {
-        return this.value;
-    }
-
-    @Override
-    public UNIT getUnit() {
-        return this.unit;
+    public YamlHouseParser(URL url) {
+        super(url, new YAMLFactory());
     }
 }

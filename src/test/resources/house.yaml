@@ -1,4 +1,5 @@
 house:
+  name: my-house
   devices:
     - name: air-conditioner
       type: Ac
@@ -14,6 +15,9 @@ house:
 
     - name: fireplace
       type: Fireplace
+
+    - name: colorful-light-0
+      type: RGBLight
 
     - name: colorful-light-1
       type: RGBLight
@@ -39,9 +43,16 @@ house:
     - name: colorful-light-8
       type: RGBLight
 
+    - name: garden-light
+      type: RGBLight
+      pcs: 10
+
     - name: temp
       type: Thermometer
-      unit: °C
+      unit: °F
+
+    - name: default-temp
+      type: Thermometer
 
     - name: humidity
       type: Hygrometer

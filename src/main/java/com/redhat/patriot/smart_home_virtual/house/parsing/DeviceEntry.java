@@ -14,33 +14,22 @@
  *    limitations under the License.
  */
 
-package com.redhat.patriot.smart_home_virtual.house;
+package com.redhat.patriot.smart_home_virtual.house.parsing;
+
+import javax.annotation.Nullable;
 
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
-public class Hygrometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
-    public static final String DEFAULT_UNIT = "%";
+public interface DeviceEntry {
+    int DEFAULT_PCS = 1;
 
-    private float value;
-    private UNIT unit;
+    String getName() throws ParserException;
+    String getType() throws ParserException;
 
-    public Hygrometer(String label) {
-        super(label);
-    }
+    @Nullable
+    Integer getPcs() throws ParserException;
 
-    public Hygrometer(String label, UNIT unit) {
-        super(label);
-        this.unit = unit;
-    }
-
-    @Override
-    public Float getValue() {
-        return this.value;
-    }
-
-    @Override
-    public UNIT getUnit() {
-        return this.unit;
-    }
+    @Nullable
+    String getUnit() throws ParserException;
 }

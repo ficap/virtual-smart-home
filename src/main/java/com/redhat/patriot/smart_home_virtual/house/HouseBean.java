@@ -16,6 +16,7 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
+import com.redhat.patriot.smart_home_virtual.house.parsing.ParserException;
 import org.apache.camel.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +34,7 @@ public final class HouseBean {
     private static HouseBean houseBean;
     private House house;
 
-    private HouseBean() throws IOException {
+    private HouseBean() throws IOException, ParserException {
         String path = System.getProperty("houseCfg", null);
         if(path != null) {
             this.house = House.getHouseInstanceFromURL(new File(path).toURI().toURL());
@@ -42,7 +43,7 @@ public final class HouseBean {
         }
     }
 
-    public static HouseBean getInstance() throws IOException {
+    public static HouseBean getInstance() throws IOException, ParserException {
         if(houseBean == null) {
             houseBean = new HouseBean();
         }

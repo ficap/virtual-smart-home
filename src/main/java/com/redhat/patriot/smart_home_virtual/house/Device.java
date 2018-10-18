@@ -34,8 +34,8 @@ public abstract class Device {
         return performCreation(type, name, new Object[]{});
     }
 
-    public static Device createDevice(String type, String name, Object arg) throws IllegalArgumentException {
-        return performCreation(type, name, new Object[]{arg});
+    public static Device createDevice(String type, String name, Object... args) throws IllegalArgumentException {
+        return performCreation(type, name, args);
     }
 
     private static Device performCreation(String type, String name, Object[] args) throws IllegalArgumentException {
@@ -55,10 +55,10 @@ public abstract class Device {
             return new Tv(name);
 
         } else if("Thermometer".equalsIgnoreCase(type)) {
-            return new Thermometer<>(name, args.length > 0 ? args[0] : null);
+            return new Thermometer<>(name, args.length > 0 && args[0] != null ? args[0] : Thermometer.DEFAULT_UNIT);
 
         } else if("Hygrometer".equalsIgnoreCase(type)) {
-            return new Hygrometer<>(name, args.length > 0 ? args[0] : null);
+            return new Hygrometer<>(name, args.length > 0 && args[0] != null ? args[0] : Hygrometer.DEFAULT_UNIT);
 
         } else {
             throw new IllegalArgumentException("No such device type: " + type);
