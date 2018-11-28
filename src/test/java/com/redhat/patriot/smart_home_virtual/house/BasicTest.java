@@ -98,4 +98,16 @@ class BasicTest {
         Thermometer<String> t = h.getDeviceWithId("default-temp", Thermometer.class);
         Assertions.assertEquals("°C", t.getUnit());
     }
+
+    @Test
+    void testDataGenerator() throws IOException, ParserException {
+        House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
+                .getResource("house.yaml"));
+        Thermometer<String> t = h.getDeviceWithId("default-temp", Thermometer.class);
+
+        System.out.println("blah");
+        for(int i = 0; i < 10; i++)
+            System.out.println(t.getValue());
+        System.out.println("blah");
+    }
 }

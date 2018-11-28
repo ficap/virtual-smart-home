@@ -16,14 +16,16 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
+import com.redhat.patriot.generator.events.DataQueue;
+
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
 public class Thermometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
     public static final String DEFAULT_UNIT = "°C";
 
-    private float temp;
     private UNIT unit;
+    private DataQueue queue = DataQueue.getInstance();
 
     public Thermometer(String label) {
         super(label);
@@ -36,7 +38,11 @@ public class Thermometer<UNIT> extends Sensor implements SimpleValueSensor<Float
 
     @Override
     public Float getValue() {
-        return this.temp;
+        try {
+            return (float) queue.take().getValue();
+        } catch (InterruptedException e) {
+            return 0f;
+        }
     }
 
     @Override

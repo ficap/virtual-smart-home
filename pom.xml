@@ -36,6 +36,7 @@
       </license>
    </licenses>
 
+
    <developers>
       <developer>
          <id>obabec</id>
@@ -274,6 +275,13 @@
          <groupId>com.google.code.findbugs</groupId>
          <artifactId>annotations</artifactId>
          <version>3.0.1</version>
+      </dependency>
+
+      <dependency>
+         <groupId>com.redhat.patriot</groupId>
+         <artifactId>generator</artifactId>
+         <version>1.0-SNAPSHOT</version>
+
       </dependency>
 
    </dependencies>

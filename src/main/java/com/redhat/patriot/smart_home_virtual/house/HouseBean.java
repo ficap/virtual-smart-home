@@ -16,6 +16,11 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
+import com.redhat.patriot.generator.dataFeed.DataFeed;
+import com.redhat.patriot.generator.dataFeed.LinearDataFeed;
+import com.redhat.patriot.generator.dataFeed.NormalDistributionDataFeed;
+import com.redhat.patriot.generator.device.Thermometer;
+import com.redhat.patriot.generator.device.active.ActiveDevice;
 import com.redhat.patriot.smart_home_virtual.house.parsing.ParserException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -36,6 +41,7 @@ public final class HouseBean {
     private static HouseBean houseBean;
     private House house;
 
+
     private HouseBean() throws IOException, ParserException {
         String path = System.getProperty("houseCfg", null);
         if(path != null) {
@@ -43,6 +49,8 @@ public final class HouseBean {
         } else {
             this.house = House.getHouseInstanceFromURL(HouseBean.class.getClassLoader().getResource("house.yaml"));
         }
+
+
     }
 
     public static HouseBean getInstance() throws IOException, ParserException {
@@ -142,6 +150,10 @@ public final class HouseBean {
     public void configureTv(Message msg) {
         String media = msg.getHeader("sound", "none", String.class);
         house.getDeviceWithId("television", Tv.class).setChannel(media);
+    }
+
+    public String getTemp() {
+        return String.valueOf(house.getDeviceWithId("temp", com.redhat.patriot.smart_home_virtual.house.Thermometer.class).getValue());
     }
 
     public House getHouse() {
