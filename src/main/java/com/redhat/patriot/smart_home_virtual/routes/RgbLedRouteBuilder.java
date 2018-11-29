@@ -16,6 +16,8 @@
 package com.redhat.patriot.smart_home_virtual.routes;
 
 import com.redhat.patriot.smart_home_virtual.house.HouseBean;
+import com.redhat.patriot.smart_home_virtual.house.RGBLight;
+import org.apache.camel.model.dataformat.JsonLibrary;
 
 /**
  * @author <a href="mailto:pavel.macik@gmail.com">Pavel Macík</a>
@@ -50,5 +52,13 @@ public class RgbLedRouteBuilder extends IntelligentHomeRouteBuilder {
 
       // REST API routes
       configureRESTRoutes();
+
+       from(restBaseUri() + "/led?httpMethodRestrict=GET")
+               .to("direct:led");
+
+       from("direct:led")
+               .setProperty("type", simple(RGBLight.class.getSimpleName()))
+               .bean(houseBean, "objInfo")
+               .marshal().json(JsonLibrary.Jackson);
    }
 }

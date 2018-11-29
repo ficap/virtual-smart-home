@@ -17,6 +17,7 @@
 package com.redhat.patriot.smart_home_virtual.house;
 
 import com.redhat.patriot.smart_home_virtual.house.parsing.ParserException;
+import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
@@ -81,6 +83,29 @@ public final class HouseBean {
 
     public void windowClose() {
         ((Door)(house.getDeviceWithId("rear-door"))).closeDoor();
+    }
+
+    public void objInfo(Exchange exchange) {
+        Object object = null;
+        if(exchange.getProperty("type").equals(Ac.class.getSimpleName())) {
+            object = house.getDeviceWithId("air-conditioner", Ac.class);
+
+        } else if(exchange.getProperty("type").equals(Door.class.getSimpleName())) {
+            if(exchange.getProperty("flag").equals("window"))
+                object = house.getDeviceWithId("rear-door", Door.class);
+            else
+                object = house.getDeviceWithId("front-door", Door.class);
+        } else if(exchange.getProperty("type").equals(Fireplace.class.getSimpleName())) {
+            object = house.getDeviceWithId("fireplace", Fireplace.class);
+        } else if(exchange.getProperty("type").equals(RGBLight.class.getSimpleName())) {
+            object = house.getAllDevices(RGBLight.class);
+        } else if(exchange.getProperty("type").equals(Tv.class.getSimpleName())) {
+            object = house.getDeviceWithId("television", Tv.class);
+        } else if(exchange.getProperty("type").equals(Object.class.getSimpleName())) {
+            object = house.getAllDevices(Object.class);
+        }
+
+        exchange.getOut().setBody(object);
     }
 
     public void configureRGBLight(String msg) {

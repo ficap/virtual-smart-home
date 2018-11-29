@@ -15,7 +15,9 @@
  */
 package com.redhat.patriot.smart_home_virtual.routes;
 
+import com.redhat.patriot.smart_home_virtual.house.Fireplace;
 import com.redhat.patriot.smart_home_virtual.house.HouseBean;
+import org.apache.camel.model.dataformat.JsonLibrary;
 
 /**
  * @author <a href="mailto:pavel.macik@gmail.com">Pavel Macík</a>
@@ -26,10 +28,20 @@ public class FireplaceRouteBuilder extends IntelligentHomeRouteBuilder {
       HouseBean houseBean = HouseBean.getInstance();
 
       from(restBaseUri() + "/fireplace/on?httpMethodRestrict=GET")
-            .to("direct:fireplace-on");
+            .to("direct:fireplace-on")
+            .to("direct:fireplace");
 
       from(restBaseUri() + "/fireplace/off?httpMethodRestrict=GET")
-            .to("direct:fireplace-off");
+            .to("direct:fireplace-off")
+            .to("direct:fireplace");
+
+       from(restBaseUri() + "/fireplace?httpMethodRestrict=GET")
+               .to("direct:fireplace");
+
+       from("direct:fireplace")
+               .setProperty("type", simple(Fireplace.class.getSimpleName()))
+               .bean(houseBean, "objInfo")
+               .marshal().json(JsonLibrary.Jackson);
 
       from("direct:fireplace-on")
             .bean(houseBean, "fireplaceOn");

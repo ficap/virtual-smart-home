@@ -15,14 +15,17 @@
  */
 package com.redhat.patriot.smart_home_virtual.routes;
 
+import com.redhat.patriot.smart_home_virtual.house.HouseBean;
+import org.apache.camel.model.dataformat.JsonLibrary;
+
 /**
  * @author <a href="mailto:pavel.macik@gmail.com">Pavel Macík</a>
  */
 public class SensorRouteBuilder extends IntelligentHomeRouteBuilder {
 
-   @Override
-   public void configure() throws Exception {
-       //TODO: implement using data generators
+    @Override
+    public void configure() throws Exception {
+        //TODO: implement using data generators
 //      final SensorDataProcessor sensorDataProcessor = new SensorDataProcessor();
 //
 //      from(restBaseUri() + "/sensorData?httpMethodRestrict=GET")
@@ -38,5 +41,13 @@ public class SensorRouteBuilder extends IntelligentHomeRouteBuilder {
 //            .process(sensorDataProcessor)
 //            .marshal().json(JsonLibrary.Jackson, true)
 //            .to("websocket:weather?sendToAll=true");
-   }
+
+        HouseBean houseBean = HouseBean.getInstance();
+
+        from(restBaseUri() + "/all?httpMethodRestrict=GET")
+                .setProperty("type", simple(Object.class.getSimpleName()))
+                .bean(houseBean, "objInfo")
+                .marshal().json(JsonLibrary.Jackson, true);
+
+    }
 }

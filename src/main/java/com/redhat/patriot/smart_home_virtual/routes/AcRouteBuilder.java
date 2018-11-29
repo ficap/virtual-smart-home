@@ -15,7 +15,9 @@
  */
 package com.redhat.patriot.smart_home_virtual.routes;
 
+import com.redhat.patriot.smart_home_virtual.house.Ac;
 import com.redhat.patriot.smart_home_virtual.house.HouseBean;
+import org.apache.camel.model.dataformat.JsonLibrary;
 
 /**
  * @author <a href="mailto:pavel.macik@gmail.com">Pavel Macík</a>
@@ -26,10 +28,21 @@ public class AcRouteBuilder extends IntelligentHomeRouteBuilder {
       HouseBean houseBean = HouseBean.getInstance();
 
       from(restBaseUri() + "/ac/on?httpMethodRestrict=GET")
-            .to("direct:ac-on");
+            .to("direct:ac-on")
+            .to("direct:ac");
 
       from(restBaseUri() + "/ac/off?httpMethodRestrict=GET")
-            .to("direct:ac-off");
+            .to("direct:ac-off")
+            .to("direct:ac");
+
+      from(restBaseUri() + "/ac?httpMethodRestrict=GET")
+              .to("direct:ac");
+
+      from("direct:ac")
+              .setProperty("type", simple(Ac.class.getSimpleName()))
+              .bean(houseBean, "objInfo")
+              .marshal().json(JsonLibrary.Jackson);
+
 
       from("direct:ac-on")
             .bean(houseBean, "acOn");
