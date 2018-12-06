@@ -55,10 +55,10 @@ public abstract class Device {
             return new Tv(name);
 
         } else if("Thermometer".equalsIgnoreCase(type)) {
-            return new Thermometer<>(name, args.length > 0 && args[0] != null ? args[0] : Thermometer.DEFAULT_UNIT);
+            return new Thermometer(name, args.length > 0 && args[0] != null ? args[0].toString() : Thermometer.DEFAULT_UNIT);
 
         } else if("Hygrometer".equalsIgnoreCase(type)) {
-            return new Hygrometer<>(name, args.length > 0 && args[0] != null ? args[0] : Hygrometer.DEFAULT_UNIT);
+            return new Hygrometer(name, args.length > 0 && args[0] != null ? args[0].toString() : Hygrometer.DEFAULT_UNIT);
 
         } else {
             throw new IllegalArgumentException("No such device type: " + type);

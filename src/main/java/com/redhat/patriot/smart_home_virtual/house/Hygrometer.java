@@ -22,19 +22,19 @@ import com.redhat.patriot.generator.dataFeed.NormalDistributionDataFeed;
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
-public class Hygrometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
+public class Hygrometer extends Sensor implements SimpleValueSensor<Float> {
     public static final String DEFAULT_UNIT = "%";
 
     private DataFeed dataFeed = new NormalDistributionDataFeed(50, 30);
     private com.redhat.patriot.generator.device.Device device = new com.redhat.patriot.generator.device.Thermometer(getLabel(), dataFeed);
 
     public Hygrometer(String label) {
-        this(label, (UNIT) DEFAULT_UNIT);
+        this(label, DEFAULT_UNIT);
     }
 
-    public Hygrometer(String label, UNIT unit) {
+    public Hygrometer(String label, String unit) {
         super(label);
-        device.setUnit(unit.toString());
+        device.setUnit(unit);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Hygrometer<UNIT> extends Sensor implements SimpleValueSensor<Float,
     }
 
     @Override
-    public UNIT getUnit() {
-        return (UNIT) device.getUnit();
+    public String getUnit() {
+        return device.getUnit();
     }
 }

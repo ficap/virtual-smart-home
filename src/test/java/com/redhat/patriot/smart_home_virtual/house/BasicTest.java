@@ -87,7 +87,7 @@ class BasicTest {
     void testDeviceUnitPresent() throws IOException, ParserException {
         House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
                 .getResource("house.yaml"));
-        Thermometer<String> t = h.getDeviceWithId("temp", Thermometer.class);
+        Thermometer t = h.getDeviceWithId("temp", Thermometer.class);
         Assertions.assertEquals("°F", t.getUnit());
     }
 
@@ -95,7 +95,7 @@ class BasicTest {
     void testDeviceUnitDefault() throws IOException, ParserException {
         House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
                 .getResource("house.yaml"));
-        Thermometer<String> t = h.getDeviceWithId("default-temp", Thermometer.class);
+        Thermometer t = h.getDeviceWithId("default-temp", Thermometer.class);
         Assertions.assertEquals("°C", t.getUnit());
     }
 
@@ -103,10 +103,10 @@ class BasicTest {
     void testDataGenerator() throws IOException, ParserException {
         House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
                 .getResource("house.yaml"));
-        Thermometer<String> thermometer = h.getDeviceWithId("default-temp", Thermometer.class);
-        Hygrometer<String> hygrometer = h .getDeviceWithId("humidity", Hygrometer.class);
+        Thermometer thermometer = h.getDeviceWithId("default-temp", Thermometer.class);
+        Hygrometer hygrometer = h .getDeviceWithId("humidity", Hygrometer.class);
 
-        Assertions.assertDoesNotThrow(() -> thermometer.getValue());
-        Assertions.assertDoesNotThrow(() -> hygrometer.getValue());
+        Assertions.assertDoesNotThrow(thermometer::getValue);
+        Assertions.assertDoesNotThrow(hygrometer::getValue);
     }
 }

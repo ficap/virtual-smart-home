@@ -19,7 +19,7 @@ package com.redhat.patriot.smart_home_virtual.house;
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
-public interface SimpleValueSensor<VALUE, UNIT> {
+public interface SimpleValueSensor<VALUE> {
     VALUE getValue();
-    UNIT getUnit();
+    String getUnit();
 }
