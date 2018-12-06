@@ -16,11 +16,6 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
-import com.redhat.patriot.generator.dataFeed.DataFeed;
-import com.redhat.patriot.generator.dataFeed.LinearDataFeed;
-import com.redhat.patriot.generator.dataFeed.NormalDistributionDataFeed;
-import com.redhat.patriot.generator.device.Thermometer;
-import com.redhat.patriot.generator.device.active.ActiveDevice;
 import com.redhat.patriot.smart_home_virtual.house.parsing.ParserException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;

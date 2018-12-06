@@ -16,31 +16,34 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
+import com.redhat.patriot.generator.dataFeed.DataFeed;
+import com.redhat.patriot.generator.dataFeed.NormalDistributionDataFeed;
+
 /**
  * @author <a href="mailto:cap.filip.devel@gmail.com">Filip Čáp</a>
  */
 public class Hygrometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
     public static final String DEFAULT_UNIT = "%";
 
-    private float value;
-    private UNIT unit;
+    private DataFeed dataFeed = new NormalDistributionDataFeed(50, 30);
+    private com.redhat.patriot.generator.device.Device device = new com.redhat.patriot.generator.device.Thermometer(getLabel(), dataFeed);
 
     public Hygrometer(String label) {
-        super(label);
+        this(label, (UNIT) DEFAULT_UNIT);
     }
 
     public Hygrometer(String label, UNIT unit) {
         super(label);
-        this.unit = unit;
+        device.setUnit(unit.toString());
     }
 
     @Override
     public Float getValue() {
-        return this.value;
+        return (float) device.requestData();
     }
 
     @Override
     public UNIT getUnit() {
-        return this.unit;
+        return (UNIT) device.getUnit();
     }
 }

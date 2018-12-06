@@ -103,11 +103,10 @@ class BasicTest {
     void testDataGenerator() throws IOException, ParserException {
         House h = House.getHouseInstanceFromURL(BasicTest.class.getClassLoader()
                 .getResource("house.yaml"));
-        Thermometer<String> t = h.getDeviceWithId("default-temp", Thermometer.class);
+        Thermometer<String> thermometer = h.getDeviceWithId("default-temp", Thermometer.class);
+        Hygrometer<String> hygrometer = h .getDeviceWithId("humidity", Hygrometer.class);
 
-        System.out.println("blah");
-        for(int i = 0; i < 10; i++)
-            System.out.println(t.getValue());
-        System.out.println("blah");
+        Assertions.assertDoesNotThrow(() -> thermometer.getValue());
+        Assertions.assertDoesNotThrow(() -> hygrometer.getValue());
     }
 }

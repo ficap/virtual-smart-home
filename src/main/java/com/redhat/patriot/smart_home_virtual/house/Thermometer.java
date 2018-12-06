@@ -16,6 +16,8 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
+import com.redhat.patriot.generator.dataFeed.DataFeed;
+import com.redhat.patriot.generator.dataFeed.NormalDistributionDataFeed;
 import com.redhat.patriot.generator.events.DataQueue;
 
 /**
@@ -24,29 +26,25 @@ import com.redhat.patriot.generator.events.DataQueue;
 public class Thermometer<UNIT> extends Sensor implements SimpleValueSensor<Float, UNIT> {
     public static final String DEFAULT_UNIT = "°C";
 
-    private UNIT unit;
-    private DataQueue queue = DataQueue.getInstance();
+    private DataFeed dataFeed = new NormalDistributionDataFeed(25, 1);
+    private com.redhat.patriot.generator.device.Device device = new com.redhat.patriot.generator.device.Thermometer(getLabel(), dataFeed);
 
     public Thermometer(String label) {
-        super(label);
+        this(label, (UNIT) DEFAULT_UNIT);
     }
 
     public Thermometer(String label, UNIT unit) {
         super(label);
-        this.unit = unit;
+        device.setUnit(unit.toString());
     }
 
     @Override
     public Float getValue() {
-        try {
-            return (float) queue.take().getValue();
-        } catch (InterruptedException e) {
-            return 0f;
-        }
+        return (float) device.requestData();
     }
 
     @Override
     public UNIT getUnit() {
-        return this.unit;
+        return (UNIT) device.getUnit();
     }
 }

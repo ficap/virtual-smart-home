@@ -16,10 +16,6 @@
 
 package com.redhat.patriot.smart_home_virtual.house;
 
-import com.redhat.patriot.generator.dataFeed.DataFeed;
-import com.redhat.patriot.generator.dataFeed.LinearDataFeed;
-import com.redhat.patriot.generator.dataFeed.NormalDistributionDataFeed;
-import com.redhat.patriot.generator.device.active.ActiveDevice;
 import com.redhat.patriot.smart_home_virtual.house.parsing.HouseComposer;
 import com.redhat.patriot.smart_home_virtual.house.parsing.ParserException;
 import com.redhat.patriot.smart_home_virtual.house.parsing.YamlHouseParser;
@@ -45,12 +41,6 @@ public final class House {
     private House(String name, Map<String, Device> devices) {
         this.name = name;
         this.devices = devices;
-
-        DataFeed dataFeed = new NormalDistributionDataFeed(60, 10);
-        DataFeed timeFeed = new LinearDataFeed(2000);
-        ActiveDevice device = new com.redhat.patriot.generator.device.Thermometer("TestThermo", dataFeed, timeFeed);
-
-        device.simulate();
     }
 
     public static House getHouseInstanceFromURL(URL path) throws IOException, ParserException {
